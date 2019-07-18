@@ -57,6 +57,7 @@ class PackagePlugin : AemPlugin() {
                 mustRunAfter(PackageUpload.NAME, PackageInstall.NAME)
             }
             register<PackageDeploy>(PackageDeploy.NAME) {
+                // todo sth here?
                 dependsOn(PackageCompose.NAME)
             }
             register<PackageDelete>(PackageDelete.NAME) {

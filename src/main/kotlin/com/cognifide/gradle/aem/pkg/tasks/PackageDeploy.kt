@@ -1,6 +1,7 @@
 package com.cognifide.gradle.aem.pkg.tasks
 
 import com.cognifide.gradle.aem.common.instance.InstanceSync
+import com.cognifide.gradle.aem.common.instance.action.AvailableAction
 import com.cognifide.gradle.aem.common.instance.action.AwaitUpAction
 import com.cognifide.gradle.aem.common.instance.names
 import com.cognifide.gradle.aem.common.tasks.PackageTask
@@ -73,6 +74,8 @@ open class PackageDeploy : PackageTask() {
 
     private var awaitUpOptions: AwaitUpAction.() -> Unit = {}
 
+    private var availableOptions: AvailableAction.() -> Unit = {}
+
     init {
         description = "Deploys CRX package on instance(s). Upload then install (and optionally activate)."
     }
@@ -109,6 +112,11 @@ open class PackageDeploy : PackageTask() {
 
     @TaskAction
     open fun deploy() {
+        aem.instanceActions.available {
+            instances = this@PackageDeploy.instances
+            availableOptions()
+        }
+        // throw AemException("Instances are unavailable:")
         aem.progress(instances.size * packages.size) {
             aem.syncPackages(instances, packages) { pkg ->
                 increment("Deploying package '${pkg.name}' to instance '${instance.name}'") {

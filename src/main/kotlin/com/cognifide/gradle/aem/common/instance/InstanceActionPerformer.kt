@@ -16,6 +16,8 @@ class InstanceActionPerformer(private val aem: AemExtension) {
 
     fun check(options: CheckAction.() -> Unit) = action(CheckAction(aem), options)
 
+    fun available(options: AvailableAction.() -> Unit) = action(AvailableAction(aem), options)
+
     private fun <T : AbstractAction> action(action: T, configurer: T.() -> Unit) {
         action.apply { notify = false }.apply(configurer).perform()
     }

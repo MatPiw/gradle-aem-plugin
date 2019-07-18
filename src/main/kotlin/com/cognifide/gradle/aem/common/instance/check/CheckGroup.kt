@@ -64,5 +64,7 @@ class CheckGroup(
 
     fun unavailable(options: UnavailableCheck.() -> Unit) = UnavailableCheck(this).apply(options)
 
+    fun available(options: AvailableCheck.() -> Unit) = AvailableCheck(this).apply(options)
+
     fun unchanged(options: UnchangedCheck.() -> Unit) = UnchangedCheck(this).apply(options)
 }

@@ -1,6 +1,7 @@
 package com.cognifide.gradle.aem.common.instance.service.osgi
 
 import com.cognifide.gradle.aem.AemException
+import com.cognifide.gradle.aem.common.http.RequestException
 import com.cognifide.gradle.aem.common.instance.InstanceException
 import com.cognifide.gradle.aem.common.instance.InstanceService
 import com.cognifide.gradle.aem.common.instance.InstanceSync
@@ -19,6 +20,9 @@ class OsgiFramework(sync: InstanceSync) : InstanceService(sync) {
             sync.http.get(BUNDLES_LIST_JSON) { asObjectFromJson(it, BundleState::class.java) }
         } catch (e: AemException) {
             aem.logger.debug("Cannot request OSGi bundles state on $instance", e)
+            BundleState.unknown(e)
+        } catch (e: RequestException) {
+            aem.logger.debug("Instance is unreachable: $instance", e)
             BundleState.unknown(e)
         }
     }
